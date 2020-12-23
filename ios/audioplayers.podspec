@@ -1,23 +1,23 @@
 #
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint audioplayers.podspec' to validate before publishing.
+# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
 #
 Pod::Spec.new do |s|
   s.name             = 'audioplayers'
   s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'A flutter plugin to play multiple simultaneously audio files.'
   s.description      = <<-DESC
-A new flutter plugin project.
+A flutter plugin to play multiple simultaneously audio files.
+
+This is a fork of rxlabz's audioplayer, with the difference that it supports playing multiple audios at the same time, and exposes volume controls.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/luanpotter/audioplayer'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Luan Nico' => 'luannico27@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
+  s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.platform = :ios, '8.0'
-
-  # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
-  s.swift_version = '5.0'
+  
+  s.ios.deployment_target = '8.0'
 end
+

@@ -2,14 +2,6 @@
 
 ## [next]
 
-## 0.17.0
-- Swift conversion of the darwin code
-
-## 0.16.2
-- Overhauled our contributing guidelines
-- Improve docs around player state
-- Update dependencies versions
-
 ## 0.16.1
 - Fix Exception thrown when calling audioPlayer.dispose
 - Fix bug with AudioCache crash on iOS

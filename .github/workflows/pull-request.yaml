@@ -15,7 +15,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: beta
-          flutter-version: '1.22.x'
+          flutter-version: '1.14.x'
       - run: flutter pub get
       - run: ./scripts/format.sh
       - run: flutter test
@@ -24,19 +24,17 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    # - uses: malinskiy/action-android/install-sdk@release/0.0.7
-    # Replaced with a fork because of this issue https://github.com/Malinskiy/action-android/issues/32
-    - uses: horie1024/action-android/install-sdk@release/0.0.9
+    - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - uses: actions/checkout@v1
     - uses: subosito/flutter-action@v1
       with:
         channel: beta
-        flutter-version: '1.22.x'
+        flutter-version: '1.14.x'
     - name: Build example app
       working-directory: ./example
       run: "flutter pub get"
     - name: Use specific Java version for sdkmanager to work
-      uses: joschi/setup-jdk@v2
+      uses: joschi/setup-jdk@v1
       with:
         java-version: 'openjdk8'
         architecture: 'x64'
@@ -64,6 +62,14 @@ jobs:
       run: "flutter drive --target=test_driver/app.dart"
 
   ios-drive:
+    # Creates a build matrix for your jobs. You can define different
+    # variations of an environment to run each job in.
+    strategy:
+      matrix:
+        device:
+        - "iPhone 11 Pro (13.6)"
+      # When set to true, GitHub cancels all in-progress jobs if any matrix job fails.
+      fail-fast: false
     runs-on: macOS-latest
 
     steps:
@@ -71,14 +77,19 @@ jobs:
       run: "xcrun instruments -s"
     - name: Start Simulator
       run: |
-        UDID=$(xcrun instruments -s | grep "iPhone" | sed -n 1p | awk -F ' *[][]' '{ print $2 }')
-        echo "Using simulator $UUID"
-        xcrun simctl boot "${UDID:?No Simulator with this name iPhone found}"
+        UDID=$(
+          xcrun instruments -s |
+          awk \
+            -F ' *[][]' \
+            -v 'device=${{ matrix.device }}' \
+            '$1 == device { print $2 }'
+        )
+        xcrun simctl boot "${UDID:?No Simulator with this name found}"
     - uses: actions/checkout@v1
     - uses: subosito/flutter-action@v1
       with:
         channel: beta
-        flutter-version: '1.22.x'
+        flutter-version: '1.14.x'
     - name: Build example app
       working-directory: ./example
       run: "flutter pub get"
